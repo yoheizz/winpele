@@ -125,6 +125,11 @@ const autoPlayer = (box, player, cpu, mode) => {
 
   if (candidates.length === 0) candidates = boxes; // 条件を満たすボックスがなければ全ボックスを候補に
 
+  // 最遅のボックスを選択
+  let slowestBox = candidates.reduce((slowest, box) => 
+    box.speed < slowest.speed ? box : slowest
+  , candidates[0]);
+
   // 最高速度のボックスを選択
   let fastestBox = candidates.reduce((fastest, box) => 
     box.speed > fastest.speed ? box : fastest
@@ -143,6 +148,9 @@ const autoPlayer = (box, player, cpu, mode) => {
   // プレイヤーとCPUの近接度やターゲット選択を強化する
   let targetBox;
   switch (mode) {
+    case "slowest":
+      targetBox = slowestBox;
+      break;
     case "fastest":
       targetBox = fastestBox;
       break;
@@ -380,6 +388,10 @@ const loop = () => {
     checkCollision(player5, box);
     checkCollision(player6, box);
     checkCollision(player1,player2);
+    checkCollision(player1,player3);
+    checkCollision(player1,player4);
+    checkCollision(player1,player5);
+    checkCollision(player1,player6);
     checkCollision(player2,player1);
     checkCollision(player3,player1);
     checkCollision(player4,player1);
@@ -389,8 +401,8 @@ const loop = () => {
     box.update();
     autoPlayer(box,player1,player2,'slowest');
     autoPlayer(box,player1,player3,'highest');
-    autoPlayer(box,player1,player4,'rightest');
-    autoPlayer(box,player1,player5,'player');
+    autoPlayer(box,player1,player4,'fastest');
+    autoPlayer(box,player1,player5,'nearest');
     autoPlayer(box,player1,player6,'all');
   });
     checkGameover(player1);
