@@ -112,14 +112,14 @@ const drawTrajectory = (A, targetBox = null, color) => {
   ctx.stroke();
 };
 
-const autoPlayer = (box, player, cpu, mode) => {
+const autoPlayer = (box, player, cpu, mode,rank) => {
   if (boxes.length === 0) return;
 
   // 候補となるボックスを取得（基本条件）
   let candidates = boxes.filter(box => 
-    box.x >= 200 && box.x <= 750 && 
-    box.y <= 700 && box.width >= 30 && 
-    box.speed < cpu.speed * 1.5 && 
+    box.x >= 200 && box.x <= 750 && //200 750
+    box.y <= 700 && box.width >= 30 && //700 30
+    box.speed < cpu.speed * 1.5 &&  //1.5
     Math.abs(box.x - cpu.x) < 400 // 極端に遠すぎるボックスを除外
   );
 
@@ -162,32 +162,32 @@ const autoPlayer = (box, player, cpu, mode) => {
       break;
     case "all":
     default:
-      // **スコアリングを強化**
-      let scoredBoxes = candidates.map(box => {
-        let score = 0;
-        let distance = calculateDistance(cpu, box);
-        let playerDistance = calculateDistance(player, box);
-        
-        // 遅いボックスを高評価
-        score -= Math.abs(box.speed - 0.5) * 4;
-        // 高いボックスを優先
-        score -= box.y * 2;
-        // 右側を優先
-        score += box.x * 0.3;
-        // プレイヤーに近いボックスを優先
-        score -= playerDistance * 0.6;
+    // **スコアリングを強化**
+    let scoredBoxes = candidates.map(box => {
+    let score = 0;
+    let distance = calculateDistance(cpu, box);
+    let playerDistance = calculateDistance(player, box);
 
-        // CPUの進行方向をより最適化
-        if (cpu.x < box.x) score += 1;
-        if (cpu.y > box.y) score += 1;
+    // 遅いボックスを高評価
+    score -= Math.abs(box.speed-0.5) * 4;//引く数字が優先速度　
+    // 高いボックスを優先
+    score -= box.y * 2;
+    // 右側を優先
+    score += box.x * 0.3;
+    // プレイヤーに近いボックスを優先
+    score -= playerDistance * 0.6;
 
-        return { box, score };
-      });
+    // CPUの進行方向をより最適化
+    if (cpu.x < box.x) score += 1;
+    if (cpu.y > box.y) score += 1;
 
-      // スコアが最も高いボックスを選択
-      scoredBoxes.sort((a, b) => b.score - a.score);
-      targetBox = scoredBoxes[0]?.box || player;
-      break;
+    return { box, score };
+    });
+
+    // スコアが最も高いボックスを選択
+    scoredBoxes.sort((a, b) => b.score - a.score);
+    targetBox = scoredBoxes[0]?.box || player;
+    break;
   }
 
   // **最適化: 第2候補の考慮**
@@ -204,7 +204,7 @@ const autoPlayer = (box, player, cpu, mode) => {
 
   // **移動処理の最適化**
   let moveDirection = cpu.x < targetBox.x ? 1 : -1;
-  const speedFactor = 0.8;  // 移動速度を上げて強化 0.8
+  const speedFactor = rank;  // 移動速度を上げて強化 0.8がいいくらい
   cpu.vx += moveDirection * speedFactor;
   if (Math.abs(cpu.vx) > 0.25) cpu.vx *= 0.90; // 速度が出過ぎたら減速 0.9
 
@@ -214,7 +214,7 @@ const autoPlayer = (box, player, cpu, mode) => {
   }
 
   // **落下防止処理**
-  if (!cpu.isJumping && cpu.y > CANVAS_H) {
+  if (!cpu.isJumping && cpu.y > 780) {
     targetBox = player;
     cpu.vy = cpu.jumpStrength;
     cpu.isJumping = true;
@@ -243,7 +243,7 @@ class Player {
   draw() {
     ctx.fillStyle = 'black';
     ctx.font = '40px Arial';
-    ctx.fillText(this.name,this.x,this.y);  
+    ctx.fillText(this.name,this.x,this.y-10);
     ctx.fillStyle = this.color;
     ctx.fillRect(this.x, this.y, this.width, this.height);
     ctx.fillStyle = "black"
@@ -351,12 +351,12 @@ class Box {
 }
 
 // 新規インスタンス
-const player1 = new Player(40,40,110,0,20,15,"red",'you');//操作するやつ
-const player2 = new Player(40,40,220,0,rand(20,23),20,'blue',);
-const player3 = new Player(40,40,330,0,rand(20,23),30,"yellow",);
-const player4 = new Player(40,40,440,0,rand(20,23),40,"green",);
-const player5 = new Player(40,40,550,0,rand(20,23),50,"orange",);
-const player6 = new Player(100,100,660,0,25,100,"gray","ボス");
+const player1 = new Player(40,40,110,0,20,15,"hotpink",'YOU');//操作するやつ
+const player2 = new Player(40,40,220,0,20,20,'blue',);//slowest
+const player3 = new Player(40,40,330,0,20,30,"yellow",);//nearest
+const player4 = new Player(40,40,440,0,25,40,"green",);//fastest
+const player5 = new Player(40,40,550,0,25,50,"orange",);//highest
+const player6 = new Player(100,100,660,0,25,100,"gray","ボス");//all
 
 const boxes = [];
 
@@ -387,23 +387,20 @@ const loop = () => {
     checkCollision(player4, box);
     checkCollision(player5, box);
     checkCollision(player6, box);
-    checkCollision(player1,player2);
-    checkCollision(player1,player3);
-    checkCollision(player1,player4);
-    checkCollision(player1,player5);
-    checkCollision(player1,player6);
-    checkCollision(player2,player1);
-    checkCollision(player3,player1);
-    checkCollision(player4,player1);
-    checkCollision(player5,player1);
-    checkCollision(player6,player1);
+    // 全てに適用
+    const allPlayers = [player1, player2, player3, player4, player5, player6];
+    for (let i = 1; i < allPlayers.length; i++) {
+        // checkCollision(player1, allPlayers[i]);
+        checkCollision(allPlayers[i], player1);
+    }
+    
     box.draw();
     box.update();
-    autoPlayer(box,player1,player2,'slowest');
-    autoPlayer(box,player1,player3,'highest');
-    autoPlayer(box,player1,player4,'fastest');
-    autoPlayer(box,player1,player5,'nearest');
-    autoPlayer(box,player1,player6,'all');
+    autoPlayer(box,player1,player2,'slowest',0.7);
+    autoPlayer(box,player1,player3,'nearest',0.8);
+    autoPlayer(box,player1,player4,'fastest',0.9);
+    autoPlayer(box,player1,player5,'highest',1);
+    autoPlayer(box,player1,player6,'all',1.5);
   });
     checkGameover(player1);
     checkGameover(player2);
