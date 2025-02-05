@@ -2,7 +2,10 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const CANVAS_W = 800;
-const CANVAS_H = 800;
+const CANVAS_H = 1000;
+const CANVAS_TOP = 200;
+const PLAYER_W =40;
+const PLAYER_H =40;
 canvas.width = CANVAS_W;
 canvas.height = CANVAS_H;
 
@@ -23,6 +26,7 @@ const calculateDistance = (A, B) => {
 
 // 当たり判定
 const checkCollision = (player, box) => {
+  if(player.isDead||box.isDead)return;
   if (
     player.x + player.width > box.x &&
     player.x < box.x + box.width &&
@@ -44,44 +48,6 @@ const createBox = () => {
     boxes.push(new Box());
   }
 };
-
-const checkGameover = (player) => {
-  let allPlayers = [player1, player2, player3, player4, player5,player6]; // プレイヤー全員
-  let cpuPlayers = allPlayers.filter(p => p !== player1); // 人間プレイヤー以外をCPUとして扱う
-  let aliveCPUs = cpuPlayers.filter(cpu => cpu.y < CANVAS_H).length; // 落ちていないCPUの数をカウント
-  
-  // ゲームオーバーの判定
-  if (player1.y >= CANVAS_H) {
-    isGameOver = true;
-    winner = 'CPU';
-  }
-  if (player.y >= CANVAS_H && player !== player1) {
-    if (aliveCPUs === 0) {
-      isGameOver = true;
-      winner = '人間';
-    }
-  }
-
-  // 残りのCPUの数を表示
-  displayRemainingCPUs(aliveCPUs);
-};
-
-const displayRemainingCPUs = (aliveCPUs) => {
-  ctx.fillStyle = 'black';
-  ctx.font = '40px Arial';
-  ctx.fillText(`残りのCPU: ${aliveCPUs}`, 10, 80);
-};
-
-const gameover = () => {
-  ctx.fillStyle = 'olive';
-  ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
-  ctx.fillStyle = 'black';
-  ctx.font = '80px Arial';
-  ctx.fillText(`勝者: ${winner} `, 100, canvas.height / 2);
-  document.getElementById("restart").style.display = "initial";
-  document.getElementById("buttonG").style.display = "none";
-};
-
 
 // 軌跡を描くための関数
 const drawTrajectory = (A, targetBox = null, color) => {
@@ -118,7 +84,7 @@ const autoPlayer = (box, player, cpu, mode,rank) => {
   // 候補となるボックスを取得（基本条件）
   let candidates = boxes.filter(box => 
     box.x >= 200 && box.x <= 750 && //200 750
-    box.y <= 700 && box.width >= 30 && //700 30
+    box.y <= CANVAS_TOP+700 && box.width >= 30 && //700 30
     box.speed < cpu.speed * 1.5 &&  //1.5
     Math.abs(box.x - cpu.x) < 400 // 極端に遠すぎるボックスを除外
   );
@@ -214,7 +180,7 @@ const autoPlayer = (box, player, cpu, mode,rank) => {
   }
 
   // **落下防止処理**
-  if (!cpu.isJumping && cpu.y > 780) {
+  if (!cpu.isJumping && cpu.y > CANVAS_TOP+780) {
     targetBox = player;
     cpu.vy = cpu.jumpStrength;
     cpu.isJumping = true;
@@ -226,9 +192,9 @@ const autoPlayer = (box, player, cpu, mode,rank) => {
 class Player {
   constructor(width,height,x,y,jumpStrength,speed,color,name) {
     this.x = x ?? CANVAS_W / 2;
-    this.y = y ?? 0;
-    this.width = width ?? 40;
-    this.height = height ?? 40;
+    this.y = y ?? CANVAS_TOP;
+    this.width = width ?? PLAYER_W;
+    this.height = height ?? PLAYER_H;
     this.vx = 0;
     this.vy = 0;
     this.vg = 0.5;
@@ -237,7 +203,8 @@ class Player {
     this.speed = speed ?? 15;
     this.startTime = performance.now();
     this.color = color ?? "black";
-    this.name = name ?? "";
+    this.name = name ?? "CPU";
+    this.isDead = false;
   }
 
   draw() {
@@ -253,6 +220,7 @@ class Player {
   }
 
   update1() {
+    if(this.isDead)return;
     const currentTime = performance.now();
     const elapsedTimeInSeconds = (currentTime - this.startTime) / 1000;
     // 遅延スタート処理
@@ -303,6 +271,7 @@ class Player {
   }
 
   update2() {
+    if(this.isDead)return;
     const currentTime = performance.now();
     const elapsedTimeInSeconds = (currentTime - this.startTime) / 1000;
     // 遅延スタート処理
@@ -350,13 +319,65 @@ class Box {
   }
 }
 
-// 新規インスタンス
-const player1 = new Player(40,40,110,0,20,15,"hotpink",'YOU');//操作するやつ
-const player2 = new Player(40,40,220,0,20,20,'blue',);//slowest
-const player3 = new Player(40,40,330,0,20,30,"yellow",);//nearest
-const player4 = new Player(40,40,440,0,25,40,"green",);//fastest
-const player5 = new Player(40,40,550,0,25,50,"orange",);//highest
-const player6 = new Player(100,100,660,0,25,100,"gray","ボス");//all
+const displayRemainingCPUs = (aliveCPUs) => {
+  ctx.fillStyle = 'black';
+  ctx.font = '40px Arial';
+  ctx.fillText(`残りのCPU: ${aliveCPUs}`, 40, 40);
+};
+
+const gameover = () => {
+  ctx.fillStyle = 'olive';
+  ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
+  ctx.fillStyle = 'black';
+  ctx.font = '80px Arial';
+  ctx.fillText(`勝者: ${winner} `, 100, CANVAS_H / 2);
+  document.getElementById("restart").style.display = "initial";
+  document.getElementById("buttonG").style.display = "none";
+};
+
+drowDeadArea=()=>{
+  ctx.fillStyle = 'rgba(128, 128, 128, 0.08)'
+  ctx.fillRect(0,0,CANVAS_W,CANVAS_TOP);
+  ctx.fillStyle = 'black';
+  ctx.font = '40px Arial';
+  ctx.fillText(`DEAD_LIST`, CANVAS_W-350, 40);
+};
+
+const deadList=[];
+
+// ゲームオーバー判定の関数を修正
+const checkGameover = (player) => {
+  const allPlayers = [player1, player2, player3, player4, player5, player6];
+  const cpuPlayers = allPlayers.filter(p => p !== player1);
+  const aliveCPUs = cpuPlayers.length-deadList.length;
+  //デッドリストへ追加
+  if (player !== player1 && player.y >= CANVAS_H){
+    deadList.push({...player});
+    player.width = PLAYER_W;
+    player.height = PLAYER_H;
+    player.x = CANVAS_W - (100 * deadList.length);
+    player.y = 120;
+    player.isDead =true;
+  }
+
+  if (player1.y >= CANVAS_H) {
+      isGameOver = true;
+      winner = "CPU";
+  } else if (player !== player1 && aliveCPUs === 0) {
+      isGameOver = true;
+      winner = "人間";
+  }
+  drowDeadArea();
+  displayRemainingCPUs(aliveCPUs);
+};
+
+// 新規インスタンス　デバック用に弱くした
+const player1 = new Player(PLAYER_W,PLAYER_H,110,CANVAS_TOP+40,20,15,"hotpink",'YOU');//操作するやつ
+const player2 = new Player(PLAYER_W,PLAYER_H,220,CANVAS_TOP+40,0,20,'blue',);//slowest
+const player3 = new Player(PLAYER_W,PLAYER_H,330,CANVAS_TOP+40,0,30,"yellow",);//nearest
+const player4 = new Player(PLAYER_W,PLAYER_H,440,CANVAS_TOP+40,5,40,"green",);//fastest
+const player5 = new Player(PLAYER_W,PLAYER_H,550,CANVAS_TOP+40,5,50,"orange",);//highest
+const player6 = new Player(100,100,660,CANVAS_TOP+40,0,100,"gray","ボス");//all
 
 const boxes = [];
 

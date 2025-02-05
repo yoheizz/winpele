@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="生き残れ！！">
+    <link rel="stylesheet" href=" https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css">
+    <link rel="stylesheet" href="style.css">
+    <title>winpele</title>
+</head>
+<style></style>
+<body>
+    <div id="adjust">
+        <div class="canvas-container">
+            <canvas class="canvas" id="canvas"></canvas>
+        </div>  
+        <div id="buttonG">
+            <div class="button-group">
+                <button id="Jump">上</button>
+            </div>
+
+            <div class="button-group">    
+                <button id="Left">左</button>
+                <button id="Right">右</button>
+            </div>  
+        </div>
+    </div>
+    <button onclick="location.reload()" id="restart">再挑戦</button>
+    <div id="warning">縦向きで遊んでください</div>    
+    <script src="main.js"></script>
+</body>
+</html>
