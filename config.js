@@ -11,4 +11,5 @@ export const config = {
     WINNER : '',
     IAM_PLAYERS : 1,
     allPlayers : [],
+    DEADLIST_H : 200,
 };

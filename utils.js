@@ -1,7 +1,5 @@
 import { config as cfg } from "./config.js";
 import { ctx } from "./canvas.js";
-import { Player } from "./player.js";
-import { autoPlayer } from "./cpu.js";
 import { Box } from "./box.js";
 
 export const getRandom = (min, max) => {
@@ -12,7 +10,6 @@ export const getDistance = (A, B) => {
     return Math.sqrt(Math.pow(B.x - A.x, 2) + Math.pow(B.y - A.y, 2));
   };
 
-// 軌跡を描くための関数
 export const drawTrajectory = (A, targetBox = null, color) => {
     let tempX = A.x;
     let tempY = A.y;
@@ -41,7 +38,6 @@ export const drawTrajectory = (A, targetBox = null, color) => {
     ctx.stroke();
   };
   
-  // 当たり判定
 export const checkCollision = (player, box) => {
     if(player.isDead||box.isDead)return;
     if (
@@ -57,7 +53,6 @@ export const checkCollision = (player, box) => {
     };
   };
 
-  // ボックスランダム生成最低１個
 export const createBox = () => {
     if (getRandom(0,12) === 0) {//15
       cfg.BOXES.push(new Box());

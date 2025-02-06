@@ -1,11 +1,9 @@
 import { config as cfg } from "./config.js";
 import * as uti  from "./utils.js";
 import { ctx } from "./canvas.js";
-import { autoPlayer } from "./cpu.js";
-import { Box } from "./box.js";
 
 export class Player {
-    constructor(index,width,height,x,y,jumpStrength,speed,color,name,cpu) {
+    constructor(width,height,x,y,jumpStrength,speed,color,name,cpu) {
       this.x = x ?? cfg.CANVAS_W / 2;
       this.y = y ?? cfg.CANVAS_TOP;
       this.width = width ?? cfg.PLAYER_W;
@@ -21,7 +19,6 @@ export class Player {
       this.name = name ?? "CPU";
       this.isDead = false;
       this.isCpu = cpu ?? true;
-      this.index = index;
     }
   
     draw() {
@@ -88,4 +85,24 @@ export class Player {
   
       document.addEventListener('touchend', () => this.vx = 0);    
     }
+
+    dead(){
+      if(!this.isDead)return;
+      this.width = cfg.PLAYER_W;
+      this.height = cfg.PLAYER_H;
+      this.x = cfg.CANVAS_W - (100 * cfg.DEAD_LIST.length);
+      this.y = 120;
+    }
+    
+    rebone(time) {
+      const currentTime = performance.now();
+      const elapsedTimeInSeconds = (currentTime - this.startTime) / 1000;
+      if (this.isDead && elapsedTimeInSeconds >= time) {
+          this.isDead = false;
+          this.startTime = performance.now();
+          this.vx = 0;
+          this.vy = 0;
+      }
+    }
+  
 };

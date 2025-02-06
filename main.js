@@ -5,14 +5,15 @@ import { Player } from "./player.js";
 import { autoPlayer } from "./cpu.js";
 import { Box } from "./box.js";
 import * as gov  from "./gameover.js";
+import * as dead from "./deadlist.js"
 
 cfg.allPlayers = [
-  new Player(1,cfg.PLAYER_W,cfg.PLAYER_H,110,cfg.CANVAS_TOP+40,20,15,"hotpink",'YOU',false),
-  new Player(2,cfg.PLAYER_W,cfg.PLAYER_H,220,cfg.CANVAS_TOP+40,0,20,'blue'),
-  new Player(3,cfg.PLAYER_W,cfg.PLAYER_H,330,cfg.CANVAS_TOP+40,0,30,"yellow"),
-  new Player(4,cfg.PLAYER_W,cfg.PLAYER_H,440,cfg.CANVAS_TOP+40,5,40,"green"),
-  new Player(5,cfg.PLAYER_W,cfg.PLAYER_H,550,cfg.CANVAS_TOP+40,5,50,"orange"),
-  new Player(6,100,100,660,cfg.CANVAS_TOP+40,0,100,"gray","ボス"),
+  new Player(cfg.PLAYER_W,cfg.PLAYER_H,110,cfg.CANVAS_TOP+40,20,15,"hotpink",'YOU',false),
+  new Player(cfg.PLAYER_W,cfg.PLAYER_H,220,cfg.CANVAS_TOP+40,0,20,'blue'),
+  new Player(cfg.PLAYER_W,cfg.PLAYER_H,330,cfg.CANVAS_TOP+40,0,30,"yellow"),
+  new Player(cfg.PLAYER_W,cfg.PLAYER_H,440,cfg.CANVAS_TOP+40,5,40,"green"),
+  new Player(cfg.PLAYER_W,cfg.PLAYER_H,550,cfg.CANVAS_TOP+40,5,50,"orange"),
+  new Player(100,100,660,cfg.CANVAS_TOP+40,0,100,"gray","ボス"),
 ];
 
 // メイン処理

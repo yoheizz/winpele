@@ -1,8 +1,5 @@
 import { config as cfg } from "./config.js";
 import * as uti  from "./utils.js";
-import { ctx } from "./canvas.js";
-import { Player } from "./player.js";
-import { Box } from "./box.js";
 
 export const autoPlayer = (box, player, cpu, mode,rank) => {
     if (cfg.BOXES.length === 0) return;

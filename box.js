@@ -1,8 +1,6 @@
 import { config as cfg } from "./config.js";
 import * as uti  from "./utils.js";
 import { ctx } from "./canvas.js";
-import { Player } from "./player.js";
-import { autoPlayer } from "./cpu.js";
 
 export class Box {
     constructor() {
