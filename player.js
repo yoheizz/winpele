@@ -36,7 +36,7 @@ export class Player {
       ctx.fillRect(this.x + 10, this.y + this.height - 15, this.width - 20, this.height / 5);
     }
   
-    update1() {
+    update() {
       if(this.isDead)return;
       const currentTime = performance.now();
       const elapsedTimeInSeconds = (currentTime - this.startTime) / 1000;
@@ -49,7 +49,9 @@ export class Player {
       }
       this.x += this.vx;
       this.y += this.vy;
-  
+
+      if(this.isCpu)return;
+      
       // キー操作
       document.addEventListener('keydown', (event) => {
         if (event.key === 'ArrowLeft') {
@@ -86,20 +88,4 @@ export class Player {
   
       document.addEventListener('touchend', () => this.vx = 0);    
     }
-  
-    update2() {
-      if(this.isDead)return;
-      const currentTime = performance.now();
-      const elapsedTimeInSeconds = (currentTime - this.startTime) / 1000;
-      // 遅延スタート処理
-      if (elapsedTimeInSeconds < 1) {
-        this.vy = 0;
-        this.vx = 0;
-      } else {
-        this.vy += this.vg;
-      }
-      this.x += this.vx;
-      this.y += this.vy;
-    }
-  };
-  
+};

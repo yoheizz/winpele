@@ -9,6 +9,6 @@ export const config = {
     BOX_COUNT : 0,
     isGameOver : false,
     WINNER : '',
-    ALL_PLAYERS : 6 ,
-    CPU_PLAYERS : 5,
+    IAM_PLAYERS : 1,
+    allPlayers : [],
 };

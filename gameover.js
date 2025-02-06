@@ -25,7 +25,9 @@ export const gameOver = () => {
   };
   
   export const checkGameover = (player) => {
-    const aliveCPUs = cfg.CPU_PLAYERS - cfg.DEAD_LIST.length;
+
+    const aliveCPUs = cfg.allPlayers.length - cfg.IAM_PLAYERS - cfg.DEAD_LIST.length;
+
     if (player.isCpu && player.y >= cfg.CANVAS_H){
       cfg.DEAD_LIST.push({...player});
       player.width = cfg.PLAYER_W;
@@ -35,7 +37,7 @@ export const gameOver = () => {
       player.isDead =true;
     }
   
-    if (player.y >= cfg.CANVAS_H) {
+    if (!player.isCpu && player.y >= cfg.CANVAS_H) {
         cfg.isGameOver = true;
         cfg.WINNER = "CPU";
     } else if (player.isCpu && aliveCPUs === 0) {
