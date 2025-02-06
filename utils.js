@@ -57,7 +57,7 @@ export const createBox = () => {
     if (getRandom(0,12) === 0) {//15
       cfg.BOXES.push(new Box());
     }else if(cfg.BOXES.length===0){
-      cfg.BOXES.push(new Box());
+      cfg.BOXES.push(new Box(1));
     }
   };
   

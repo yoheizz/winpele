@@ -7,13 +7,13 @@ import { Box } from "./box.js";
 import * as gov  from "./gameover.js";
 import * as dead from "./deadlist.js"
 
-cfg.allPlayers = [
-  new Player(cfg.PLAYER_W,cfg.PLAYER_H,110,cfg.CANVAS_TOP+40,20,15,"hotpink",'YOU',false),
-  new Player(cfg.PLAYER_W,cfg.PLAYER_H,220,cfg.CANVAS_TOP+40,0,20,'blue'),
-  new Player(cfg.PLAYER_W,cfg.PLAYER_H,330,cfg.CANVAS_TOP+40,0,30,"yellow"),
-  new Player(cfg.PLAYER_W,cfg.PLAYER_H,440,cfg.CANVAS_TOP+40,5,40,"green"),
-  new Player(cfg.PLAYER_W,cfg.PLAYER_H,550,cfg.CANVAS_TOP+40,5,50,"orange"),
-  new Player(100,100,660,cfg.CANVAS_TOP+40,0,100,"gray","ボス"),
+cfg.ALL_PLAYERS = [
+  new Player(cfg.PLAYER_W,cfg.PLAYER_H,1*100,cfg.CANVAS_TOP+40,20,15,"hotpink",'YOU',false),
+  new Player(cfg.PLAYER_W,cfg.PLAYER_H,2*100,cfg.CANVAS_TOP+40,10,20,'blue'),
+  new Player(cfg.PLAYER_W,cfg.PLAYER_H,3*100,cfg.CANVAS_TOP+40,10,30,"yellow"),
+  new Player(cfg.PLAYER_W,cfg.PLAYER_H,4*100,cfg.CANVAS_TOP+40,15,40,"green"),
+  new Player(cfg.PLAYER_W,cfg.PLAYER_H,5*100,cfg.CANVAS_TOP+40,15,50,"orange"),
+  new Player(100,100,6*100,cfg.CANVAS_TOP+40,0,100,"gray","ボス"),
 ];
 
 // メイン処理
@@ -24,7 +24,7 @@ const loop = () => {
   }
   ctx.clearRect(0, 0, cfg.CANVAS_W, cfg.CANVAS_H);
 
-  cfg.allPlayers.forEach(player =>{
+  cfg.ALL_PLAYERS.forEach(player =>{
     player.draw();
     player.update();
   })
@@ -36,25 +36,28 @@ const loop = () => {
     box.draw();
     box.update();
 
-    cfg.allPlayers.forEach(player =>{
+    cfg.ALL_PLAYERS.forEach(player =>{
       uti.checkCollision(player, box);
     })
     
-    for(let i=1; i>cfg.allPlayers.length; i++){
-      uti.checkCollision(cfg.allPlayers[i], cfg.allPlayers[0])
+    for(let i=1; i>cfg.ALL_PLAYERS.length; i++){
+      uti.checkCollision(cfg.ALL_PLAYERS[i], cfg.ALL_PLAYERS[0])
     }
 
-    autoPlayer(box,cfg.allPlayers[0],cfg.allPlayers[1],'slowest',0.7);
-    autoPlayer(box,cfg.allPlayers[0],cfg.allPlayers[2],'nearest',0.8);
-    autoPlayer(box,cfg.allPlayers[0],cfg.allPlayers[3],'fastest',0.9);
-    autoPlayer(box,cfg.allPlayers[0],cfg.allPlayers[4],'highest',1);
-    autoPlayer(box,cfg.allPlayers[0],cfg.allPlayers[5],'all',1.5);
+    autoPlayer(box,cfg.ALL_PLAYERS[0],cfg.ALL_PLAYERS[1],'slowest',0.7);
+    autoPlayer(box,cfg.ALL_PLAYERS[0],cfg.ALL_PLAYERS[2],'nearest',0.8);
+    autoPlayer(box,cfg.ALL_PLAYERS[0],cfg.ALL_PLAYERS[3],'fastest',0.9);
+    autoPlayer(box,cfg.ALL_PLAYERS[0],cfg.ALL_PLAYERS[4],'highest',1);
+    autoPlayer(box,cfg.ALL_PLAYERS[0],cfg.ALL_PLAYERS[5],'all',1.5);
 
   });
 
-  cfg.allPlayers.forEach(player =>{
+  cfg.ALL_PLAYERS.forEach(player =>{
     gov.checkGameover(player);
   })
+
+  dead.drawDeadArea();
+  dead.displayAliveCPUs(dead.getAliveCPUs());
 
   requestAnimationFrame(loop);
 };

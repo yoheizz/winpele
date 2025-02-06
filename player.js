@@ -19,36 +19,23 @@ export class Player {
       this.name = name ?? "CPU";
       this.isDead = false;
       this.isCpu = cpu ?? true;
+      this.elapsedTime = 0;
     }
   
     draw() {
-      ctx.fillStyle = 'black';
-      ctx.font = '40px Arial';
-      ctx.fillText(this.name,this.x,this.y-10);
-      ctx.fillStyle = this.color;
-      ctx.fillRect(this.x, this.y, this.width, this.height);
-      ctx.fillStyle = "black"
-      ctx.fillRect(this.x + 10, this.y + 5, this.width / 5, this.height / 5);
-      ctx.fillRect(this.x + this.width - 15, this.y + 5, this.width / 5, this.height / 5);
-      ctx.fillRect(this.x + 10, this.y + this.height - 15, this.width - 20, this.height / 5);
+        ctx.fillStyle = 'black';
+        ctx.font = '40px Arial';
+        ctx.fillText(this.name,this.x,this.y-10);
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.fillStyle = "black"
+        ctx.fillRect(this.x + 10, this.y + 5, this.width / 5, this.height / 5);
+        ctx.fillRect(this.x + this.width - 15, this.y + 5, this.width / 5, this.height / 5);
+        ctx.fillRect(this.x + 10, this.y + this.height - 15, this.width - 20, this.height / 5);
     }
-  
     update() {
-      if(this.isDead)return;
-      const currentTime = performance.now();
-      const elapsedTimeInSeconds = (currentTime - this.startTime) / 1000;
-      // 遅延スタート処理
-      if (elapsedTimeInSeconds < 1) {
-        this.vy = 0;
-        this.vx = 0;
-      } else {
-        this.vy += this.vg;
-      }
-      this.x += this.vx;
-      this.y += this.vy;
-
+      this.elpased(1);
       if(this.isCpu)return;
-      
       // キー操作
       document.addEventListener('keydown', (event) => {
         if (event.key === 'ArrowLeft') {
@@ -86,8 +73,27 @@ export class Player {
       document.addEventListener('touchend', () => this.vx = 0);    
     }
 
-    dead(){
-      if(!this.isDead)return;
+    elpased(time){
+      const currentTime = performance.now();
+      const elapsedTimeInSeconds = (currentTime - this.startTime) / 1000;
+      if (elapsedTimeInSeconds < time) {
+        this.vy = 0;
+        this.vx = 0;
+      } else {
+        this.vy += this.vg;
+      }
+      this.x += this.vx;
+      this.y += this.vy;
+    }
+
+    dead() {
+      if (this.isDead) {
+        this.resetPosition();
+        this.rebone(2);
+      }
+    }
+    
+    resetPosition() {
       this.width = cfg.PLAYER_W;
       this.height = cfg.PLAYER_H;
       this.x = cfg.CANVAS_W - (100 * cfg.DEAD_LIST.length);
@@ -95,14 +101,12 @@ export class Player {
     }
     
     rebone(time) {
-      const currentTime = performance.now();
-      const elapsedTimeInSeconds = (currentTime - this.startTime) / 1000;
-      if (this.isDead && elapsedTimeInSeconds >= time) {
-          this.isDead = false;
-          this.startTime = performance.now();
-          this.vx = 0;
-          this.vy = 0;
+      const elapsedTime = (performance.now() - this.startTime) / 1000;
+      if (this.isDead && elapsedTime >= time) {
+        this.isDead = false;
+        this.startTime = performance.now();  // 時間リセット
+        this.vx = 0;
+        this.vy = 0;
       }
-    }
-  
+    }    
 };

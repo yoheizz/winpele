@@ -10,6 +10,6 @@ export const config = {
     isGameOver : false,
     WINNER : '',
     IAM_PLAYERS : 1,
-    allPlayers : [],
+    ALL_PLAYERS : [],
     DEADLIST_H : 200,
 };

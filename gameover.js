@@ -24,6 +24,4 @@ export const gameOver = () => {
         cfg.isGameOver = true;
         cfg.WINNER = "人間";
     }
-    dead.drawDeadArea();
-    dead.displayAliveCPUs(dead.getAliveCPUs());
   };
