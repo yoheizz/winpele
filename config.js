@@ -12,8 +12,11 @@ export const config = {
     IAM_PLAYERS : 1,
     ALL_PLAYERS : [],
     DEADLIST_H : 150,
-    BOX_LEVEL : 12,
+    BOX_LEVEL : 10,
     PLAYER_E_TIME : 1,
     REBONE_TIME : 5,
-    FPS : 1000 / 30,
+    MAGMA_H : 30,
+    MAGMA_WAVE : 10,
+    FPS : 1000/80,
+    GAME_TIME : 0,
 };

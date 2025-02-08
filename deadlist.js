@@ -23,5 +23,6 @@ export const drawDeadArea = () => {
     ctx.fillStyle = 'black';
     ctx.font = '40px Arial';
     ctx.fillText(`残りのCPU: ${aliveCPUs}`, 40, cfg.DEADLIST_H/3);
+    ctx.fillText(`ボックス数: ${cfg.BOX_COUNT}`,500, cfg.DEADLIST_H/3);
   };
   

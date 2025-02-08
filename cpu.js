@@ -6,10 +6,10 @@ export const autoPlayer = (box, player, cpu, mode,rank) => {
   
     // 候補となるボックスを取得（基本条件）
     let candidates = cfg.BOXES.filter(box => 
-      box.x >= 200 && box.x <= 750 && //200 750
-      box.y <= cfg.CANVAS_TOP+700 && box.width >= 30 && //700 30
+      box.x >= cfg.CANVAS_W*0.2 && box.x <= cfg.CANVAS_W*0.9 && //200 750
+      box.y <= cfg.CANVAS_H*0.9 && box.width >= 30 && //700 30
       box.speed < cpu.speed * 1.5 &&  //1.5
-      Math.abs(box.x - cpu.x) < 400 // 極端に遠すぎるボックスを除外
+      Math.abs(box.x - cpu.x) < cfg.CANVAS_W*0.5 // 極端に遠すぎるボックスを除外
     );
   
     if (candidates.length === 0) candidates = cfg.BOXES; // 条件を満たすボックスがなければ全ボックスを候補に

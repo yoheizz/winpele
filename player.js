@@ -85,6 +85,7 @@ export class Player {
     dead() {
         if(!this.isDead)return;
         this.resetPosition();
+        // this.rebone(3); //保留
     }
     
     resetPosition() {
@@ -92,7 +93,7 @@ export class Player {
       this.y = cfg.DEADLIST_H-this.height*1.1;
     }
     
-    rebone(time) {//保留
+    rebone(time) {
       const elpsedTime = (performance.now() - this.startTime) / 1000;
       if (this.isDead && elpsedTime >= time) {
         this.isDead = false;
@@ -114,7 +115,9 @@ export class Player {
       this.isDead = false;
       this.startTime = performance.now(); 
     }
-
+    getTime(){
+      cfg.GAME_TIME = ((performance.now() - this.startTime) / 1000).toFixed(2);
+    }
     left(){
       this.vx = -this.speed;
     }

@@ -61,7 +61,7 @@ export const createBox = () => {
     if (getRandom(0,cfg.BOX_LEVEL) === 0) {//15
       cfg.BOXES.push(new Box());
     }else if(cfg.BOXES.length===0){
-      cfg.BOXES.push(new Box(1));
+      cfg.BOXES.push(new Box("gold"));
     }
   };
 
@@ -70,8 +70,8 @@ export const checkDisplay = () => {
   if (isLandscape) {
     document.getElementById('buttonG').style.display = 'none';
     const canvas = document.getElementById('canvas');
-    canvas.style.width = '40%';
-    canvas.style.heigh = '40%';
+    canvas.style.width = '50%';
+    canvas.style.height = '50%';
   } else {
     document.getElementById('buttonG').style.display = 'initial';
   }

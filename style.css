@@ -1,14 +1,21 @@
 #body {
   text-align: center;
   background-color: black;
+  touch-action: none;
   user-select: none;
   height: 100vh;
-  width: 100wh;
+  width: 100vw;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.canvas-container {
+  position: relative;
+  display: inline-block;
 }
 
 .canvas {
-  text-align: center;
   width: 100%;
   height: auto;
   max-width: 800px;
@@ -16,34 +23,41 @@
   background-color: powderblue;
 }
 
+#restart {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-55%, 55%);
+  z-index: 10;
+  padding: 40px 40px;
+}
 .button-group {
   padding: 5px;
   display: flex;
   justify-content: center;
 }
 
-  button{
-    margin-top: 10px;
-    padding: 50px;
-    margin-left: 10px;
-    margin-right: 10px;
-    border: none;
-    background-color:gray;
-  }
-  #Jump{
-    padding-left: 160px;
-    padding-right: 160px;
-  }
-  #Left{
-    padding-left: 80px;
-    padding-right: 80px;
-  }
-  #Right{
-    padding-left: 80px;
-    padding-right: 80px;
-  }
-  #restart{
-    display: none;
-    padding-left: 120px;
-    padding-right: 120px;
-  }
+button{
+  margin-top: 10px;
+  padding: 50px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border: none;
+  background-color:gray;
+  color: white;
+  border: none;
+  font-size: 20px;
+}
+#Jump{
+  padding-left: 160px;
+  padding-right: 160px;
+}
+#Left{
+  padding-left: 70px;
+  padding-right: 70px;
+}
+#Right{
+  padding-left: 70px;
+  padding-right: 70px;
+}
