@@ -8,31 +8,16 @@ import * as gov from "./gameover.js";
 import * as dead from "./deadlist.js";
 import { drawMagma } from "./magma.js";
 
-const delay=(ms)=> {
-  return new Promise(resolve => setTimeout(resolve, ms));
-};
-
-const restartGame = () => {
-  cfg.BOXES.forEach(box => { box.restart(); });
-  cfg.ALL_PLAYERS.forEach(player => { player.restart(); });
-  cfg.DEAD_LIST = [];
-  cfg.isGameOver = false;
-  cfg.BOX_COUNT = 0;
-  uti.checkDisplay();
-  document.getElementById("restart").style.display = "none";
-  loop();
-};
-
-cfg.ALL_PLAYERS = [
-  new Player(cfg.PLAYER_W, cfg.PLAYER_H, 1 * 100, cfg.CANVAS_TOP - cfg.PLAYER_H, 20, 15, "hotpink", 'YOU', false),
-  new Player(cfg.PLAYER_W, cfg.PLAYER_H, 2 * 100, cfg.CANVAS_TOP - cfg.PLAYER_H, 20, 15, uti.getColor(), "A", true),
-  new Player(cfg.PLAYER_W, cfg.PLAYER_H, 3 * 100, cfg.CANVAS_TOP - cfg.PLAYER_H, 20, 15, uti.getColor(), "B", true),
-  new Player(cfg.PLAYER_W, cfg.PLAYER_H, 4 * 100, cfg.CANVAS_TOP - cfg.PLAYER_H, 20, 15, uti.getColor(), "C", true),
-  new Player(cfg.PLAYER_W, cfg.PLAYER_H, 5 * 100, cfg.CANVAS_TOP - cfg.PLAYER_H, 20, 15, uti.getColor(), "D", true),
-  new Player(cfg.PLAYER_W, cfg.PLAYER_H, 6 * 100, cfg.CANVAS_TOP - cfg.PLAYER_H, 20, 15, uti.getColor(), "E", true),
+cfg.ALL_PLAYERS =[
+    new Player(cfg.PLAYER_W, cfg.PLAYER_H, 1 * 100, cfg.CANVAS_TOP - cfg.PLAYER_H, 20, 15, "hotpink", 'YOU', false),
+    new Player(cfg.PLAYER_W, cfg.PLAYER_H, 2 * 100, cfg.CANVAS_TOP - cfg.PLAYER_H, 20, 15, uti.getColor(), "A", true),
+    new Player(cfg.PLAYER_W, cfg.PLAYER_H, 3 * 100, cfg.CANVAS_TOP - cfg.PLAYER_H, 20, 15, uti.getColor(), "B", true),
+    new Player(cfg.PLAYER_W, cfg.PLAYER_H, 4 * 100, cfg.CANVAS_TOP - cfg.PLAYER_H, 20, 15, uti.getColor(), "C", true),
+    new Player(cfg.PLAYER_W, cfg.PLAYER_H, 5 * 100, cfg.CANVAS_TOP - cfg.PLAYER_H, 20, 15, uti.getColor(), "D", true),
+    new Player(cfg.PLAYER_W, cfg.PLAYER_H, 6 * 100, cfg.CANVAS_TOP - cfg.PLAYER_H, 20, 15, uti.getColor(), "E", true),
 ];
 
-const loop = async () => {
+const loop = () => {
   if (cfg.isGameOver) {
     gov.gameOver();
     return;
@@ -74,13 +59,22 @@ const loop = async () => {
   dead.displayAliveCPUs(dead.getAliveCPUs());
   uti.checkLock();
   drawMagma();
-
-  await delay(cfg.FPS);
-  loop();
+  requestAnimationFrame(loop);
 };
 
 window.onload = () => {
   document.getElementById("restart").addEventListener("click", restartGame);
   uti.checkDisplay();
-  loop();
+  requestAnimationFrame(loop);
+};
+
+const restartGame = () => {
+  cfg.BOXES.forEach(box => { box.restart(); });
+  cfg.ALL_PLAYERS.forEach(player => { player.restart(); });
+  cfg.DEAD_LIST = [];
+  cfg.isGameOver = false;
+  cfg.BOX_COUNT = 0;
+  uti.checkDisplay();
+  document.getElementById("restart").style.display = "none";
+  requestAnimationFrame(loop);
 };

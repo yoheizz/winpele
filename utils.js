@@ -58,12 +58,17 @@ export const checkCollision = (player, box) => {
   };
 
 export const createBox = () => {
-    if (getRandom(0,cfg.BOX_LEVEL) === 0) {//15
-      cfg.BOXES.push(new Box());
-    }else if(cfg.BOXES.length===0){
-      cfg.BOXES.push(new Box("gold"));
-    }
-  };
+  const boxColors = ["blue", "green", "purple", "orange", "gold"];
+  let defaltColor = "brown";  
+  if (getRandom(0, 99) >= 80) {
+    defaltColor = boxColors[getRandom(0, boxColors.length - 1)];
+  }
+  if (getRandom(0, cfg.BOX_LEVEL) === 0) {
+    cfg.BOXES.push(new Box(defaltColor));
+  } else if (cfg.BOXES.length === 0) {
+    cfg.BOXES.push(new Box(defaltColor));
+  }
+};
 
 export const checkDisplay = () => {
   const isLandscape = window.innerWidth > window.innerHeight;

@@ -11,7 +11,7 @@ export class Player {
       this.vx = 0;
       this.vy = 0;
       this.vg = 0.5;
-      this.jumpStrength = -jumpStrength ?? -20;
+      this.jumpStrength = -jumpStrength ??-20;
       this.isJumping = false;
       this.speed = speed ?? 15;
       this.startTime = performance.now();
@@ -114,6 +114,7 @@ export class Player {
       this.isJumping = false;
       this.isDead = false;
       this.startTime = performance.now(); 
+      this.color = uti.getColor();
     }
     getTime(){
       cfg.GAME_TIME = ((performance.now() - this.startTime) / 1000).toFixed(2);

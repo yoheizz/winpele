@@ -21,11 +21,9 @@ export const gameOver = () => {
         cfg.isGameOver = true;
         cfg.WINNER = "CPU";
         player.getTime();
-        cfg.DEADLIST_H = cfg.CANVAS_H;
     } else if (player.isCpu && dead.getAliveCPUs() === 0) {
         cfg.isGameOver = true;
         cfg.WINNER = "YOU";
         player.getTime();
-        cfg.DEADLIST_H = cfg.CANVAS_H;
     }
   };

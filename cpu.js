@@ -103,10 +103,9 @@ export const autoPlayer = (box, player, cpu, mode,rank) => {
     }
   
     // **落下防止処理**
-    if (!cpu.isJumping && cpu.y > cfg.CANVAS_TOP+780) {
+    if (!cpu.isJumping && cpu.y > cfg.CANVAS_H*0.98) {
       targetBox = player;
-      cpu.vy = cpu.jumpStrength;
-      cpu.isJumping = true;
+      cpu.up();
     }
   };
   

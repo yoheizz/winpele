@@ -5,7 +5,7 @@ import { ctx } from "./canvas.js";
 export class Box {
     constructor(color) {
       this.x = cfg.CANVAS_W;
-      this.y = uti.getRandom(cfg.CANVAS_TOP, cfg.CANVAS_H);
+      this.y = uti.getRandom(cfg.CANVAS_TOP*1.5, cfg.CANVAS_H);
       this.width = uti.getRandom(1, 300);
       this.height = uti.getRandom(1, 100);
       this.speed = uti.getRandom(5, 40);
@@ -40,16 +40,31 @@ export class Box {
     }
 
     checkMode() {
+      // "brown", "blue", "green", "purple", "orange", "gold"
       switch (this.color) {
         case "gold":
-          this.speed = 50;
+          this.width = 300;
+          this.height = 300;
           break;
-        default:
-
+        case "orange":
+          this.width = 500;
+          this.height =30;
+          break;
+        case "purple":
+          this.width = 30;
+          this.height = 500;
+          break;
+        case "green":
+          this.speed = 30;
+          break;
+        case "blue":
+          this.speed = 8;
+          this.up = 0;
+          break;
+        case "brown":
           break;
       }
     }
-    
     restart(){
       cfg.BOXES=[];
     }
