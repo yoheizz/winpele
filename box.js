@@ -42,5 +42,8 @@ export class Box {
         this.y += Math.sin(this.speed) * this.up;
       }
     }
+    restart(){
+      cfg.BOXES=[];
+    }
 };
   

@@ -20,6 +20,8 @@ export class Player {
       this.isDead = false;
       this.isCpu = cpu ?? true;
       this.elapsedTime = 0;
+      this.initialx = this.x;
+      this.initialy = this.y
     }
   
     draw() {
@@ -34,35 +36,29 @@ export class Player {
         ctx.fillRect(this.x + 10, this.y + this.height - 15, this.width - 20, this.height / 5);
     }
     update() {
-      this.elpased(1);
+      this.elpased(cfg.PLAYER_E_TIME);
       if(this.isCpu)return;
-      // キー操作
+
       document.addEventListener('keydown', (event) => {
         if (event.key === 'ArrowLeft') {
-          this.vx = -this.speed;  // 左に移動
+          this.left();
         } else if (event.key === 'ArrowRight') {
-          this.vx = this.speed;   // 右に移動
-        } else if (event.key === 'ArrowUp' && !this.isJumping) {
-          this.vy = this.jumpStrength;
-          this.isJumping = true;
+          this.right();
+        } else if (event.key === 'ArrowUp') {
+         this.up();
         }
       });
-  
+
       document.addEventListener('keyup', (event) => {
         if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-          this.vx = 0;  // キーを離した時に停止
+          this.keyup();
         }
       });
-      // タッチ操作
+
       const buttonHandlers = {
-        'Jump': () => {
-          if (!this.isJumping) {
-            this.vy = this.jumpStrength;
-            this.isJumping = true;
-          }
-        },
-        'Left': () => this.vx = -this.speed,  // 左に移動
-        'Right': () => this.vx = this.speed   // 右に移動
+        'Jump': () => this.up(),
+        'Left': () => this.left(),
+        'Right': () => this.right()
       };
   
       Object.keys(buttonHandlers).forEach(buttonId => {
@@ -70,43 +66,68 @@ export class Player {
         button.addEventListener('touchstart', buttonHandlers[buttonId]);
       });
   
-      document.addEventListener('touchend', () => this.vx = 0);    
+      document.addEventListener('touchend', () => this.keyup());    
     }
 
     elpased(time){
+      if(this.isDead)return;
       const currentTime = performance.now();
-      const elapsedTimeInSeconds = (currentTime - this.startTime) / 1000;
-      if (elapsedTimeInSeconds < time) {
-        this.vy = 0;
-        this.vx = 0;
-      } else {
+      const elpsedTimeInSeconds = (currentTime - this.startTime) / 1000;
+      if (elpsedTimeInSeconds >= time) {
         this.vy += this.vg;
+        this.x += this.vx;
+        this.y += this.vy;
+      } else {
+        this.vx = 0;
+        this.vy = 0;
       }
-      this.x += this.vx;
-      this.y += this.vy;
     }
-
     dead() {
-      if (this.isDead) {
+        if(!this.isDead)return;
         this.resetPosition();
-        this.rebone(2);
-      }
     }
     
     resetPosition() {
-      this.width = cfg.PLAYER_W;
-      this.height = cfg.PLAYER_H;
       this.x = cfg.CANVAS_W - (100 * cfg.DEAD_LIST.length);
-      this.y = 120;
+      this.y = cfg.DEADLIST_H-this.height*1.1;
     }
     
-    rebone(time) {
-      const elapsedTime = (performance.now() - this.startTime) / 1000;
-      if (this.isDead && elapsedTime >= time) {
+    rebone(time) {//保留
+      const elpsedTime = (performance.now() - this.startTime) / 1000;
+      if (this.isDead && elpsedTime >= time) {
         this.isDead = false;
-        this.startTime = performance.now();  // 時間リセット
+        const index = cfg.DEAD_LIST.indexOf(this);
+        if (index !== -1) {
+          cfg.DEAD_LIST.splice(index, 1);
+        }
+        this.startTime = performance.now();
         this.vx = 0;
         this.vy = 0;
       }
-    }    
+    }
+    restart(){
+      this.x = this.initialx;
+      this.y = this.initialy;
+      this.vx = 0;
+      this.vy = 0;
+      this.isJumping = false;
+      this.isDead = false;
+      this.startTime = performance.now(); 
+    }
+
+    left(){
+      this.vx = -this.speed;
+    }
+    right(){
+      this.vx = this.speed;
+    }
+    up(){
+      if(!this.isJumping){
+      this.vy = this.jumpStrength;
+      this.isJumping = true;
+      }
+    }
+    keyup(){
+      this.vx = 0;
+    }
 };

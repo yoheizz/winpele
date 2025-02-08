@@ -1,43 +1,49 @@
-body{
-    text-align: center;
-    background-color: black;
-    user-select: none;
-    touch-action: manipulation;
+#body {
+  text-align: center;
+  background-color: black;
+  user-select: none;
+  height: 100vh;
+  width: 100wh;
+  margin: 0;
 }
 
-.canvas{
-      width: 100%;
-      height: 100%;
-      max-width: 400px;
-      max-height: 500px;
-      border: 2px solid black;
-      background-color:powderblue;
-  }
+.canvas {
+  text-align: center;
+  width: 100%;
+  height: auto;
+  max-width: 800px;
+  max-height: 800px;
+  background-color: powderblue;
+}
 
-  .button-group{
-    padding: 10px;
-  }
+.button-group {
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+}
 
   button{
     margin-top: 10px;
     padding: 50px;
     margin-left: 10px;
     margin-right: 10px;
-    border-radius: 5%;
     border: none;
-    background-color:whitesmoke;
+    background-color:gray;
   }
   #Jump{
-    padding-left: 60px;
-    padding-right: 60px;
+    padding-left: 160px;
+    padding-right: 160px;
   }
-
+  #Left{
+    padding-left: 80px;
+    padding-right: 80px;
+  }
+  #Right{
+    padding-left: 80px;
+    padding-right: 80px;
+  }
   #restart{
     display: none;
-  }
-
-  #warning{
-    display: none;
-    font-size: xx-large;
-    color: yellow;
+    padding-left: 120px;
+    padding-right: 120px;
   }

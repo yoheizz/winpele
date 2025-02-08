@@ -1,7 +1,7 @@
 export const config = {
     CANVAS_W : 800,
-    CANVAS_H : 1000,
-    CANVAS_TOP : 200,
+    CANVAS_H : 800,
+    CANVAS_TOP : 150,
     PLAYER_W : 40,
     PLAYER_H : 40,
     BOXES : [],
@@ -11,5 +11,9 @@ export const config = {
     WINNER : '',
     IAM_PLAYERS : 1,
     ALL_PLAYERS : [],
-    DEADLIST_H : 200,
+    DEADLIST_H : 150,
+    BOX_LEVEL : 12,
+    PLAYER_E_TIME : 1,
+    REBONE_TIME : 5,
+    FPS : 1000 / 30,
 };

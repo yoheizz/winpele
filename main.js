@@ -7,13 +7,23 @@ import { Box } from "./box.js";
 import * as gov  from "./gameover.js";
 import * as dead from "./deadlist.js"
 
+const restartGame = () => {
+  cfg.BOXES.forEach(box =>{box.restart();});
+  cfg.ALL_PLAYERS.forEach(player =>{player.restart();});
+  cfg.DEAD_LIST =[];
+  cfg.isGameOver = false;
+  cfg.BOX_COUNT = 0;
+  document.getElementById("restart").style.display = "none";
+  requestAnimationFrame(loop);
+};
+
 cfg.ALL_PLAYERS = [
-  new Player(cfg.PLAYER_W,cfg.PLAYER_H,1*100,cfg.CANVAS_TOP+40,20,15,"hotpink",'YOU',false),
-  new Player(cfg.PLAYER_W,cfg.PLAYER_H,2*100,cfg.CANVAS_TOP+40,10,20,'blue'),
-  new Player(cfg.PLAYER_W,cfg.PLAYER_H,3*100,cfg.CANVAS_TOP+40,10,30,"yellow"),
-  new Player(cfg.PLAYER_W,cfg.PLAYER_H,4*100,cfg.CANVAS_TOP+40,15,40,"green"),
-  new Player(cfg.PLAYER_W,cfg.PLAYER_H,5*100,cfg.CANVAS_TOP+40,15,50,"orange"),
-  new Player(100,100,6*100,cfg.CANVAS_TOP+40,0,100,"gray","ボス"),
+  new Player(cfg.PLAYER_W,cfg.PLAYER_H,1*100,cfg.CANVAS_TOP+cfg.PLAYER_H,20,15,"hotpink",'YOU',false),
+  new Player(cfg.PLAYER_W,cfg.PLAYER_H,2*100,cfg.CANVAS_TOP+cfg.PLAYER_H,10,2,uti.getColor(),"A",true),
+  new Player(cfg.PLAYER_W,cfg.PLAYER_H,3*100,cfg.CANVAS_TOP+cfg.PLAYER_H,10,3,uti.getColor(),"B",true),
+  new Player(cfg.PLAYER_W,cfg.PLAYER_H,4*100,cfg.CANVAS_TOP+cfg.PLAYER_H,15,4,uti.getColor(),"C",true),
+  new Player(cfg.PLAYER_W,cfg.PLAYER_H,5*100,cfg.CANVAS_TOP+cfg.PLAYER_H,15,5,uti.getColor(),"D",true),
+  new Player(cfg.PLAYER_W,cfg.PLAYER_H,6*100,cfg.CANVAS_TOP+cfg.PLAYER_H,15,9,uti.getColor(),"E",true),
 ];
 
 // メイン処理
@@ -49,7 +59,6 @@ const loop = () => {
     autoPlayer(box,cfg.ALL_PLAYERS[0],cfg.ALL_PLAYERS[3],'fastest',0.9);
     autoPlayer(box,cfg.ALL_PLAYERS[0],cfg.ALL_PLAYERS[4],'highest',1);
     autoPlayer(box,cfg.ALL_PLAYERS[0],cfg.ALL_PLAYERS[5],'all',1.5);
-
   });
 
   cfg.ALL_PLAYERS.forEach(player =>{
@@ -58,10 +67,12 @@ const loop = () => {
 
   dead.drawDeadArea();
   dead.displayAliveCPUs(dead.getAliveCPUs());
-
+  uti.checkLock();
   requestAnimationFrame(loop);
 };
 
 window.onload = () => {
+  document.getElementById("restart").addEventListener("click", restartGame);
+  uti.checkDisplay();
   requestAnimationFrame(loop);
 };

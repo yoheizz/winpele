@@ -1,9 +1,13 @@
 import { config as cfg } from "./config.js";
 import { ctx } from "./canvas.js";
+import { Player } from "./player.js";
+import { autoPlayer } from "./cpu.js";
 import { Box } from "./box.js";
+import * as gov  from "./gameover.js";
+import * as dead from "./deadlist.js"
 
 export const getRandom = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1) + min);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   };
 
 export const getDistance = (A, B) => {
@@ -54,10 +58,39 @@ export const checkCollision = (player, box) => {
   };
 
 export const createBox = () => {
-    if (getRandom(0,12) === 0) {//15
+    if (getRandom(0,cfg.BOX_LEVEL) === 0) {//15
       cfg.BOXES.push(new Box());
     }else if(cfg.BOXES.length===0){
       cfg.BOXES.push(new Box(1));
     }
   };
-  
+
+export const checkDisplay = () => {
+  const isLandscape = window.innerWidth > window.innerHeight;
+  if (isLandscape) {
+    document.getElementById('buttonG').style.display = 'none';
+    const canvas = document.getElementById('canvas');
+    canvas.style.width = '40%';
+    canvas.style.heigh = '40%';
+  } else {
+    document.getElementById('buttonG').style.display = 'initial';
+  }
+};
+ 
+export const checkLock = () => {
+  let startTime;
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') {
+      startTime = performance.now();
+    } else if (document.visibilityState === 'visible') {
+      startTime = performance.now();
+    }
+  });
+};
+
+export const getColor = () => {
+  const r = getRandom(0, 255);
+  const g = getRandom(0, 255);
+  const b = getRandom(0, 255);
+  return `rgb(${r}, ${g}, ${b})`;
+};
