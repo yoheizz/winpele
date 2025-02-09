@@ -7,12 +7,19 @@ import * as gov  from "./gameover.js";
 import * as dead from "./deadlist.js"
 
 export const getRandom = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
 
 export const getDistance = (A, B) => {
-    return Math.sqrt(Math.pow(B.x - A.x, 2) + Math.pow(B.y - A.y, 2));
-  };
+  return Math.sqrt(Math.pow(B.x - A.x, 2) + Math.pow(B.y - A.y, 2));
+};
+
+export const getColor = () => {
+  const r = getRandom(0, 255);
+  const g = getRandom(0, 255);
+  const b = getRandom(0, 255);
+  return `rgb(${r}, ${g}, ${b})`;
+};
 
 export const drawTrajectory = (A, targetBox = null, color) => {
     let tempX = A.x;
@@ -57,19 +64,6 @@ export const checkCollision = (player, box) => {
     };
   };
 
-export const createBox = () => {
-  const boxColors = ["blue", "green", "purple", "orange", "gold"];
-  let defaltColor = "brown";  
-  if (getRandom(0, 99) >= 80) {
-    defaltColor = boxColors[getRandom(0, boxColors.length - 1)];
-  }
-  if (getRandom(0, cfg.BOX_LEVEL) === 0) {
-    cfg.BOXES.push(new Box(defaltColor));
-  } else if (cfg.BOXES.length === 0) {
-    cfg.BOXES.push(new Box(defaltColor));
-  }
-};
-
 export const checkDisplay = () => {
   const isLandscape = window.innerWidth > window.innerHeight;
   if (isLandscape) {
@@ -93,9 +87,3 @@ export const checkLock = () => {
   });
 };
 
-export const getColor = () => {
-  const r = getRandom(0, 255);
-  const g = getRandom(0, 255);
-  const b = getRandom(0, 255);
-  return `rgb(${r}, ${g}, ${b})`;
-};

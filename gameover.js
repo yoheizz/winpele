@@ -9,8 +9,8 @@ import * as dead from "./deadlist.js"
 export const gameOver = () => {
     ctx.fillStyle = 'black'
     ctx.font = '80px Arial';
-    ctx.fillText(`勝者: ${cfg.WINNER} `, cfg.CANVAS_W/4, cfg.CANVAS_H*0.5);
-    ctx.fillText(`タイム${cfg.GAME_TIME}秒 `, cfg.CANVAS_W/4, cfg.CANVAS_H*0.7);
+    ctx.fillText(`勝者: ${cfg.WINNER} `, cfg.CANVAS_W*0.2, cfg.CANVAS_H*0.5);
+    ctx.fillText(`タイム${cfg.GAME_TIME}秒 `, cfg.CANVAS_W*0.2, cfg.CANVAS_H*0.7);
     document.getElementById("restart").style.display = "initial";
     document.getElementById("buttonG").style.display = "none";
   };

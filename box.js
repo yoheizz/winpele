@@ -11,21 +11,18 @@ export class Box {
       this.speed = uti.getRandom(5, 40);
       this.up = uti.getRandom(0, 5);
       this.number = cfg.BOX_COUNT++;
-      this.color = color ?? "brown";
+      this.color = color;
     }
   
     draw() {
       this.checkMode();
       ctx.fillStyle = this.color;
       ctx.fillRect(this.x, this.y, this.width, this.height);
-      ctx.font = '30px Arial';
-      ctx.fillStyle = this.color;
-      ctx.fillText(this.number, this.x, this.y);
       }
   
     update() {
-        this.splice();
-        this.move();
+      this.splice();
+      this.move();
     }
     
     splice() {
@@ -40,28 +37,27 @@ export class Box {
     }
 
     checkMode() {
-      // "brown", "blue", "green", "purple", "orange", "gold"
       switch (this.color) {
-        case "gold":
+        case cfg.BOX_COLORS[1]:
           this.width = 300;
           this.height = 300;
           break;
-        case "orange":
+        case cfg.BOX_COLORS[2]:
           this.width = 500;
           this.height =30;
           break;
-        case "purple":
+        case cfg.BOX_COLORS[3]:
           this.width = 30;
           this.height = 500;
           break;
-        case "green":
+        case cfg.BOX_COLORS[4]:
           this.speed = 30;
           break;
-        case "blue":
+        case cfg.BOX_COLORS[5]:
           this.speed = 8;
           this.up = 0;
           break;
-        case "brown":
+        case cfg.BOX_COLORS[0]:
           break;
       }
     }

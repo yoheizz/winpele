@@ -3,19 +3,19 @@ import * as uti  from "./utils.js";
 import { ctx } from "./canvas.js";
 
 export class Player {
-    constructor(width,height,x,y,jumpStrength,speed,color,name,cpu) {
-      this.x = x ?? cfg.CANVAS_W / 2;
-      this.y = y ?? cfg.CANVAS_TOP;
-      this.width = width ?? cfg.PLAYER_W;
-      this.height = height ?? cfg.PLAYER_H;
+    constructor(x,y,name,cpu) {
+      this.x = x;
+      this.y = cfg.P_START_y;
+      this.width = cfg.PLAYER_W;
+      this.height =cfg.PLAYER_H;
       this.vx = 0;
       this.vy = 0;
-      this.vg = 0.5;
-      this.jumpStrength = -jumpStrength ??-20;
+      this.vg = cfg.P_GRAVITY;
+      this.jumpStrength = cfg.P_JUMP;
       this.isJumping = false;
-      this.speed = speed ?? 15;
+      this.speed = cfg.P_SPEED;
       this.startTime = performance.now();
-      this.color = color ?? "black";
+      this.color = cpu ? uti.getColor() : "hotpink";
       this.name = name ?? "CPU";
       this.isDead = false;
       this.isCpu = cpu ?? true;
@@ -114,7 +114,7 @@ export class Player {
       this.isJumping = false;
       this.isDead = false;
       this.startTime = performance.now(); 
-      this.color = uti.getColor();
+      if(this.isCpu)this.color = uti.getColor();
     }
     getTime(){
       cfg.GAME_TIME = ((performance.now() - this.startTime) / 1000).toFixed(2);
